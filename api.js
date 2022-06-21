@@ -6,7 +6,7 @@ const api = (app, db) => {
     app.post('/api/users', async function (req, res) {
         const { username, password } = req.body
         
-        let userData = await db.oneOrMany('select count(*) from love_user where username = $1 AND pass = $2', [username, password])
+        let userData = await db.one('select count(*) from love_user where username = $1 AND pass = $2', [username, password])
 
         if (userData.count == 0) {
             bcrypt.genSalt(saltRounds, function(err, salt) {
