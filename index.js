@@ -48,7 +48,6 @@ const config = {
  
  const db = pgp(config);
 
-
 API(app, db);
 
 const PORT = process.env.PORT || 2012;
