@@ -29,7 +29,7 @@ app.use((req, res, next) => {
   });
 
 app.use(cors({
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+    methods: ['POST','DELETE','UPDATE','PUT','PATCH']
 }));
 // cores code ends here
 
