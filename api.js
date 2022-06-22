@@ -37,7 +37,7 @@ const api = (app, db) => {
         
         let token = jwt.sign(user, 'secretKey', { expiresIn: '24h' });
         console.log(user);
-        // console.log(username);
+
         if (user == 0) {
             res.json({
                 message: 'Oop! Your are not registered please do so',
@@ -52,15 +52,6 @@ const api = (app, db) => {
             })
         }
     })
-
-    // app.get('/api/users', async function(req, res){
-    //     const { username, password } = req.body
-    //     let userData = await db.one('select count(*) from love_user where username = $1 AND pass = $2', [username, password])
-    //     res.json({
-    //         data: userData
-    //     })
-
-    // })
 
     app.get('/test', (req, res) => res.json({ user: 'john' }))
 }
