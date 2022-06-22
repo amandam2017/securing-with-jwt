@@ -3,4 +3,4 @@ create table love_user(
     username text,
     pass varchar,
     love_count integer DEFAULT 0
-)
+);
