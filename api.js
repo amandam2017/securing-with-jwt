@@ -15,9 +15,10 @@ const api = (app, db) => {
                 });
             });
             // await db.none('insert into love_user (username, pass) values ($1, $2)', [username, password]);
+            let token = jwt.sign(userData, 'secretKey', { expiresIn: '24h' });
             res.json({
                 message: 'User successfuly registered',
-                data: userData
+                data: token
             })
         }
         else {
@@ -36,8 +37,6 @@ const api = (app, db) => {
         let user = await db.oneOrNone('select username from love_user where username = $1', [username])
         console.log(user);
         // console.log(username);
-        let token = jwt.sign(userData, 'secretKey', { expiresIn: '24h' });
-
         if (user == null) {
             res.json({
                 message: 'Oop! Your are not registered please do so',
@@ -46,7 +45,6 @@ const api = (app, db) => {
         }
         else {
             res.json({
-                data:token,
                 message: `you are logged in ${username}`
 
             })
