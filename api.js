@@ -6,9 +6,9 @@ const api = (app, db) => {
     app.post('/api/users', async function (req, res) {
         const { username, password } = req.body
 
-        let userData = await db.one('select count(*) from love_user where username = $1 AND pass = $2', [username, password])
+        let userData = await db.oneOrNone('select *from love_user where username = $1 AND pass = $2', [username, password])
 
-        if (userData.count == 0) {
+        if (userData == null) {
             bcrypt.genSalt(saltRounds, function (err, salt) {
                 bcrypt.hash(password, salt, async function (err, hash) {
                     await db.none('insert into love_user (username, pass) values ($1, $2)', [username, hash]);
