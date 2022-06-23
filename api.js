@@ -19,6 +19,16 @@ const api = (app, db) => {
                 message: 'User successfuly registered',
                 data: userData
             })
+
+            // const comparePass = await bcrypt.compare(password, user.pass);
+
+            // if (comparePass) {
+            //     res.json({
+            //         message: 'user already exist',
+            //         status: 401
+            //     });
+                
+            // }
         }
         else {
             res.json({
@@ -33,24 +43,47 @@ const api = (app, db) => {
     app.post('/api/login', async function (req, res) {
         const { username, password } = req.body
 
-        let user = await db.one('select count(*) from love_user where username = $1 AND pass = $2', [username, password])
+        let user = await db.oneOrNone('select * from love_user where username = $1', [username])
         
-        let token = jwt.sign(user, 'secretKey', { expiresIn: '24h' });
-        console.log(user);
+        console.log({user});
 
-        if (user == 0) {
+        if(user == null){
             res.json({
                 message: 'Oop! Your are not registered please do so',
                 status: 401
             });
         }
-        else {
-            res.json({
-                message: `you are logged in ${username}`,
-                data:token
+        
+        if (user !== null) {
+            const comparePass = await bcrypt.compare(password, user.pass);
+            if (!comparePass ) {
+                res.json({
+                    message: 'Oop! Pass not match',
+                    status: 401
+                });
+                
+            }else{
+                let token = jwt.sign(user, 'secretKey', { expiresIn: '24h' });
 
-            })
+                res.json({
+                    message: `you are logged in ${username}`,
+                    data:token
+    
+                })
+
+            }
+            
         }
+        
+        
+        
+        // else {
+        //     res.json({
+        //         message: `you are logged in ${username}`,
+        //         data:token
+
+        //     })
+        // }
     })
 
     app.get('/test', (req, res) => res.json({ user: 'john' }))
