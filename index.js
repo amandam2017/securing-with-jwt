@@ -50,7 +50,7 @@ const config = {
 
 API(app, db);
 
-const PORT = process.env.PORT || 2012;
+const PORT = process.env.PORT || 2013;
 
 app.listen(PORT, function () {
 	console.log(`App started on port ${PORT}`)
