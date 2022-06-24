@@ -94,8 +94,7 @@ const api = (app, db) => {
             const userhearts = await hearts(username)
             const user = await db.oneOrNone('select * from love_user where username = $1', [username])
             console.log({user, username});
-            // console.log(user);
-            // console.log(heart)
+
             res.json({
                 userhearts,
                 user
@@ -118,13 +117,6 @@ const api = (app, db) => {
             }
         }
 
-        // else {
-        //     res.json({
-        //         message: `you are logged in ${username}`,
-        //         data:token
-
-        //     })
-        // }
     })
 
     app.get('/test', (req, res) => res.json({ user: 'john' }))
