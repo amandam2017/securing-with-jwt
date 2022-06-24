@@ -88,14 +88,16 @@ const api = (app, db) => {
         }
 
         app.post('/api/counter', authanticateToken, async function (req, res) {
-            let userName = await db.oneOrNone('select * from love_user where username = $1', [username])
-
+            const { username } = req.body
+            // console.log({username});
             // console.log(userName);
-            await db.oneOrNone('UPDATE love_user SET lovecounter = lovecounter+1 WHERE username = $1', [userName]);
-            const heart = await hearts(userName)
+            await db.none('UPDATE love_user SET lovecounter = lovecounter+1 WHERE username = $1', [username]);
+            const userhearts = await hearts(username)
+            const user = await db.oneOrNone('select * from love_user where username = $1', [username])
             // console.log(heart)
             res.json({
-                data: heart
+                userhearts,
+                user
             })
         })
 
