@@ -7,13 +7,13 @@ const api = (app, db) => {
         const { username, password } = req.body
 
         let userName = await db.oneOrNone('select * from love_user where username = $1', [username])
-        if(userName == null){
-            res.json({
-                message: 'User is empty',
-                status: 401
-            })
-        }
-        else if(userName !== null){
+        // if(userName == null){
+        //     res.json({
+        //         message: 'User is empty',
+        //         status: 401
+        //     })
+        // }
+        if(userName !== null){
             res.json({
                 message: 'User already registered please login with username',
                 status: 401
@@ -30,33 +30,6 @@ const api = (app, db) => {
                 data: userName
             })
         }
-        // if (userData == null) {
-        //     bcrypt.genSalt(saltRounds, function (err, salt) {
-        //         bcrypt.hash(password, salt, async function (err, hash) {
-        //         });
-        //     });
-        //     // await db.none('insert into love_user (username, pass) values ($1, $2)', [username, password]);
-        //     res.json({
-        //         message: 'User successfuly registered',
-        //         data: userData
-        //     })
-
-        //     // const comparePass = await bcrypt.compare(password, user.pass);
-
-        //     // if (comparePass) {
-        //     //     res.json({
-        //     //         message: 'user already exist',
-        //     //         status: 401
-        //     //     });
-
-        //     // }
-        // }
-        // else {
-        //     res.json({
-        //         message: 'User already registered please login with username',
-        //         status: 401
-        //     })
-        // }
 
 
     })
@@ -98,7 +71,7 @@ const api = (app, db) => {
             // inside this function we want to get the token that is generated/sent to us and to verify if this is the correct user.
             const authHeader = req.headers['authorization']
             // console.log({authHeader});
-            const token = authHeader && authHeader.split(" ")[1]
+            const token = jwt.sign(user, 'secretKey', { expiresIn: '24h' });
             // if theres no token tell me
             if (token === null) return res.sendStatus(401)
             // if there is then verify if its the correct user using token if not return the error
@@ -115,9 +88,12 @@ const api = (app, db) => {
         }
 
         app.post('/api/counter', authanticateToken, async function (req, res) {
-            const userName = req.body
+            let userName = await db.oneOrNone('select * from love_user where username = $1', [username])
+
+            // console.log(userName);
             await db.oneOrNone('UPDATE love_user SET lovecounter = lovecounter+1 WHERE username = $1', [userName]);
             const heart = await hearts(userName)
+            // console.log(heart)
             res.json({
                 data: heart
             })
