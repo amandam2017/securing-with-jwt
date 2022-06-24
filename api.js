@@ -6,36 +6,51 @@ const api = (app, db) => {
     app.post('/api/users', async function (req, res) {
         const { username, password } = req.body
 
-        let userData = await db.oneOrNone('select * from love_user where username = $1 AND pass = $2', [username, password])
-
-        if (userData === null) {
+        let userName = await db.oneOrNone('select * from love_user where username = $1', [username])
+        if(userName !== null){
+            res.json({
+                message: 'User already registered please login with username',
+                status: 401
+            })
+        }else{
             bcrypt.genSalt(saltRounds, function (err, salt) {
                 bcrypt.hash(password, salt, async function (err, hash) {
                     await db.none('insert into love_user (username, pass) values ($1, $2)', [username, hash]);
                 });
             });
-            // await db.none('insert into love_user (username, pass) values ($1, $2)', [username, password]);
+
             res.json({
                 message: 'User successfuly registered',
-                data: userData
-            })
-
-            // const comparePass = await bcrypt.compare(password, user.pass);
-
-            // if (comparePass) {
-            //     res.json({
-            //         message: 'user already exist',
-            //         status: 401
-            //     });
-
-            // }
-        }
-        else {
-            res.json({
-                message: 'User already registered please login with username',
-                status: 401
+                data: userName
             })
         }
+        // if (userData == null) {
+        //     bcrypt.genSalt(saltRounds, function (err, salt) {
+        //         bcrypt.hash(password, salt, async function (err, hash) {
+        //         });
+        //     });
+        //     // await db.none('insert into love_user (username, pass) values ($1, $2)', [username, password]);
+        //     res.json({
+        //         message: 'User successfuly registered',
+        //         data: userData
+        //     })
+
+        //     // const comparePass = await bcrypt.compare(password, user.pass);
+
+        //     // if (comparePass) {
+        //     //     res.json({
+        //     //         message: 'user already exist',
+        //     //         status: 401
+        //     //     });
+
+        //     // }
+        // }
+        // else {
+        //     res.json({
+        //         message: 'User already registered please login with username',
+        //         status: 401
+        //     })
+        // }
 
 
     })
