@@ -7,7 +7,13 @@ const api = (app, db) => {
         const { username, password } = req.body
 
         let userName = await db.oneOrNone('select * from love_user where username = $1', [username])
-        if(userName !== null){
+        if(userName == null){
+            res.json({
+                message: 'User is empty',
+                status: 401
+            })
+        }
+        else if(userName !== null){
             res.json({
                 message: 'User already registered please login with username',
                 status: 401
