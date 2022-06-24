@@ -60,6 +60,7 @@ const api = (app, db) => {
                 let token = jwt.sign(user, 'secretKey', { expiresIn: '24h' });
 
                 res.json({
+                    user,
                     message: `you are logged in ${username}`,
                     data: token
 
@@ -89,11 +90,11 @@ const api = (app, db) => {
 
         app.post('/api/counter', authanticateToken, async function (req, res) {
             const { username } = req.body
-            // console.log({username});
-            // console.log(userName);
             await db.none('UPDATE love_user SET lovecounter = lovecounter+1 WHERE username = $1', [username]);
             const userhearts = await hearts(username)
             const user = await db.oneOrNone('select * from love_user where username = $1', [username])
+            console.log({user, username});
+            // console.log(user);
             // console.log(heart)
             res.json({
                 userhearts,
@@ -103,6 +104,7 @@ const api = (app, db) => {
 
         async function hearts(userName) {
             const loveCounter = await db.oneOrNone('select lovecounter from love_user where user = $1', [userName]);
+            // console.log(loveCounter);
             if (loveCounter <= 0) {
                 return "💔"
             }
