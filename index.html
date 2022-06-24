@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/securing-with-jwt/assets/favicon.17e50649.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Vite App</title>
+  <script type="module" crossorigin src="/securing-with-jwt/assets/index.c7661d7f.js"></script>
+  <link rel="stylesheet" href="/securing-with-jwt/assets/index.c9ef8e1d.css">
+</head>
+
+<body>
+  
+    <!-- <div> -->
+    <div x-data="usernames">
+    <div x-show="registerForm" class="reg">
+      <span x-text="error_message " class="error_message"></span>
+
+      <!-- <label for="user">Username</label> -->
+    <h4>Register User</h4>
+    <input x-model="enteredUsername" placeholder="e.g username">
+    <input type="password" x-model="enteredPass" placeholder="e.g password">
+    <button @click="userRegister()">Register</button>
+    <!-- <span x-text="usernames"></span> -->
+   
+    </div>
+    <div class="login">
+      <!-- <span></span> -->
+      <span x-text="info_message" class="infor_message"></span>
+      <h4>Login</h4>
+      <span x-text="resultsMessage"></span>
+      <input x-model="user" placeholder="username">
+      <input type="password" x-model="pass" placeholder="e.g password">
+      <!-- <input x-model="password" placeholder="Password"> -->
+      <button @click="userLogin(), loggedIn = false">Login</button> 
+      
+    </div>
+    <button @click="registerForm = true, loggedIn = false">Register</button> 
+      <button @click="logout()">LogOut</button> 
+<hr>
+  <div class="locecoun">
+    <div x-show="loggedIn">
+      <h1>Show some heart</h1>
+      <div class="counter">
+        <div x-text="hearts">
+        </div>
+    
+          <button class="ui secondary button" @click="counterUpdate()">Show 💟</button>
+          <span x-text="user.lovecounter"></span>
+          <!-- <span x-text="counter"></span> -->
+      </div>
+    </div>
+    </div>
+    <hr>
+  </div>
+  <!-- </div> -->
+  
+</body>
+
+</html>
